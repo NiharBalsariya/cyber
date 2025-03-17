@@ -1,24 +1,21 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 
-app.use(express.json());
+// Use Render's assigned PORT
+const PORT = process.env.PORT || 3000; 
 
-// Home Route
+// Allow Render to properly accept requests from any IP
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
 app.get('/', (req, res) => {
-    res.send('Welcome to the Simple HTTP Web Service!');
+    res.send('Welcome to my simple API!');
 });
 
-// API Route
-app.get('/api/data', (req, res) => {
-    const responseData = {
-        message: 'Hello from the server!',
-        timestamp: new Date().toISOString()
-    };
-    res.json(responseData);
+app.get('/greet', (req, res) => {
+    const name = req.query.name || 'Guest';
+    res.json({ message: `Hello, ${name}!` });
 });
 
-// Start Server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
-});
+module.exports = app;
